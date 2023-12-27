@@ -2,7 +2,7 @@ services:
   django:
     build: .
     container_name: django
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8000 # コンテナ起動時に実行されるコマンドを指定
     volumes:
       - .:/usr/src/app
     ports:
@@ -14,19 +14,30 @@ services:
     image: postgres:14
     container_name: pgdb
     environment:
-      - POSTGRES_DB=postgres
+      - POSTGRES_DB=ecommerce
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     ports: 
       - "5434:5432"
+    volumes:
+      - volume_postgres:/var/lib/postgresql/data
+      - ./postgres_service/initdb.d:/docker-entrypoint-initdb.d
 
   pgdb_pgadmin:
     image: dpage/pgadmin4:6.11
     container_name: pgdb_pgadmin
     ports:
       - 8081:80
+    volumes:
+      - volume_pgadmin:/var/lib/pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: baskhuu@gmail.com
       PGADMIN_DEFAULT_PASSWORD: qwerty
     depends_on:
       - pgdb
+
+volumes:
+  volume_postgres:
+    name: vpg
+  volume_pgadmin:
+    name: vpga

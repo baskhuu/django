@@ -1,2 +1,6 @@
+# Django package
 Django>=3.0,<4.0
+# PostgreSQL database adapter 
 psycopg2-binary>=2.8
+# Environment variable read module
+# python-dotenv
